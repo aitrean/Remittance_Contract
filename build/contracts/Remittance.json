@@ -1,0 +1,173 @@
+{
+  "contract_name": "Remittance",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "password",
+          "type": "uint256"
+        }
+      ],
+      "name": "withdraw",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "pauseContract",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "remittances",
+      "outputs": [
+        {
+          "name": "remittanceOwner",
+          "type": "address"
+        },
+        {
+          "name": "recipient",
+          "type": "address"
+        },
+        {
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "name": "deadline",
+          "type": "uint256"
+        },
+        {
+          "name": "password",
+          "type": "bytes32"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "recipient",
+          "type": "address"
+        },
+        {
+          "name": "deadline",
+          "type": "uint256"
+        },
+        {
+          "name": "password",
+          "type": "bytes32"
+        }
+      ],
+      "name": "createRemittance",
+      "outputs": [],
+      "payable": true,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "resumeContract",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "contractOwner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "running",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "payable": false,
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "recipient",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "deadline",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "password",
+          "type": "bytes32"
+        }
+      ],
+      "name": "LogCreateRemittance",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "LogWithraw",
+      "type": "event"
+    }
+  ],
+  "unlinked_binary": "0x60606040526000805460a060020a60ff021916740100000000000000000000000000000000000000001790556032600155341561003b57600080fd5b5b60008054600160a060020a03191633600160a060020a03161790555b5b6104f7806100686000396000f300606060405236156100805763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416632e1a7d4d8114610085578063439766ce1461009d578063519716d1146100b25780637937e8e01461010b578063c4bc5da514610127578063ce606ee01461013c578063d85bd5261461016b575b600080fd5b341561009057600080fd5b61009b600435610192565b005b34156100a857600080fd5b61009b610246565b005b34156100bd57600080fd5b6100d1600160a060020a0360043516610283565b604051600160a060020a0395861681529390941660208401526040808401929092526060830152608082019290925260a001905180910390f35b61009b600160a060020a03600435166024356044356102bf565b005b341561013257600080fd5b61009b610447565b005b341561014757600080fd5b61014f61049b565b604051600160a060020a03909116815260200160405180910390f35b341561017657600080fd5b61017e6104aa565b604051901515815260200160405180910390f35b60003382604051600160a060020a03929092166c010000000000000000000000000282526014820152603401604051908190039020600160a060020a03331660009081526002602052604090206004015414156100805750600160a060020a0333166000818152600260208190526040808320909101805492905590919082156108fc0290839051600060405180830381858888f19350505050151561023757600080fd5b610241565b600080fd5b5b5050565b60005433600160a060020a0390811691161461026157600080fd5b6000805474ff0000000000000000000000000000000000000000191690555b5b565b600260208190526000918252604090912080546001820154928201546003830154600490930154600160a060020a039283169490921692909185565b600160a060020a03331660009081526002602081905260409091200154156102e657600080fd5b600054600154600160a060020a039091169080156108fc0290604051600060405180830381858888f19350505050151561031f57600080fd5b60a06040519081016040908152600160a060020a0333811680845290861660208085019190915234838501526060840186905260808401859052600091825260029052208151815473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0391909116178155602082015160018201805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a039290921691909117905560408201518160020155606082015181600301556080820151600490910155507fc7415b56c7fc3481c591a8fe27daba53fd10252fa70f6744136014307ef447933384348585604051600160a060020a0395861681529390941660208401526040808401929092526060830152608082019290925260a001905180910390a15b5b505050565b60005433600160a060020a0390811691161461046257600080fd5b6000805474ff00000000000000000000000000000000000000001916740100000000000000000000000000000000000000001790555b5b565b600054600160a060020a031681565b60005474010000000000000000000000000000000000000000900460ff16815600a165627a7a723058203d512e1838132a87a5751d2476ec464f692a688a885700ad2d1f828be2d600cc0029",
+  "networks": {},
+  "schema_version": "0.0.5",
+  "updated_at": 1508367278328
+}
