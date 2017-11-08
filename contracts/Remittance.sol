@@ -1,7 +1,6 @@
 pragma solidity ^0.4.0;
 contract Remittance {
-
-    struct remittanceFund {
+    struct RemittanceFund {
         address remittanceOwner;
         address recipient;
         uint amount;
@@ -11,18 +10,18 @@ contract Remittance {
     address public contractOwner;
     bool public running = true;
     uint ownerCut = 50; //the contract owner's cut for deploying a remittance fund
-    mapping(address=>remittanceFund) public remittances;
+    mapping(address=>RemittanceFund) public remittances;
     
-		event LogCreateRemittance(address from, address recipient, uint amount, uint deadline, bytes32 password);
-		event LogWithraw(address to, uint amount);
+	event LogCreateRemittance(address from, address recipient, uint amount, uint deadline, bytes32 password);
+	event LogWithdraw(address to, uint amount);
 
     modifier isOwner(){
         require(msg.sender == contractOwner);
         _;
     }
-    
-    modifier noRemittancePresent(){
-        require(remittances[msg.sender].amount == 0);
+
+    modifier isRunning(){
+        require(running == true);
         _;
     }
     
@@ -30,27 +29,42 @@ contract Remittance {
         contractOwner = msg.sender;
     }
     
-    function pauseContract() public isOwner(){
+    function pauseContract() public isOwner() {
         running = false;
     }
     
-    function resumeContract() public isOwner(){
+    function resumeContract() public isOwner() {
         running = true;
     }
-    
-    function createRemittance(address recipient, uint deadline, bytes32 password) public payable noRemittancePresent() {
-        contractOwner.transfer(ownerCut); 
-        remittances[msg.sender] = remittanceFund(msg.sender, recipient, msg.value, deadline, password);
-				LogCreateRemittance(msg.sender, recipient, msg.value, deadline, password);
+
+    function generatePassword(address recipient, string password) internal returns (bytes32) {
+        return keccak256(recipient, password);
     }
     
-    function withdraw(uint password) public {
-        if(remittances[msg.sender].password == keccak256(msg.sender, password)){
+    function createRemittance(address recipient, uint deadline, string password) public isRunning() payable {
+        require(remittances[recipient].amount == 0);
+        contractOwner.transfer(ownerCut); 
+        bytes32 hashedPassword = generatePassword(recipient, password);
+        remittances[recipient] = RemittanceFund(msg.sender, recipient, msg.value, deadline, hashedPassword);
+		LogCreateRemittance(msg.sender, recipient, msg.value, deadline, hashedPassword);
+    }
+    
+    function liquidateRemittance(address recipient) public isRunning() {
+        require(msg.sender == remittances[recipient].remittanceOwner && block.number >= remittances[recipient].deadline);
+        uint remittanceValue = remittances[recipient].amount;
+        LogWithdraw(msg.sender, remittanceValue);
+        delete remittances[recipient];
+        msg.sender.send(remittanceValue);
+    }
+    
+    function withdraw(string password) public isRunning()  returns (bool) {
+        if(remittances[msg.sender].password == generatePassword(msg.sender, password)) {
             uint remittanceValue = remittances[msg.sender].amount;
-            delete remittances[msg.sender].amount; //delete the mapping for future allocations of remittances
-            msg.sender.transfer(remittanceValue);
-        } else {
-            revert();
+            LogWithdraw(msg.sender, remittanceValue);
+            delete remittances[msg.sender]; 
+            msg.sender.send(remittanceValue);   
+            return true;
         }
+        return false;
     }
 }
